@@ -1,11 +1,11 @@
-name: abt
-title: abt
+name: jack
+title: jack
 description: A Blocklet Server blocklet
 keywords:
   - blocklet
   - vue
 group: static
-did: z8iZyUwTVqoq8vyTfDb4V1XiMmCrFAPVDQCXB
+did: z8iZpLKDnF8WAA3Fn8gp1R6ZSde3piWGsSERj
 main: dist
 author:
   name: zhanghan

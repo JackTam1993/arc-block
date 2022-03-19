@@ -1,4 +1,10 @@
 const {
+    checkCache,
+    getCache,
+    setCache
+} = require('../libs/cache')
+
+const {
     getTxsData
 } = require('../libs/http')
 
@@ -12,11 +18,22 @@ const getData = async function (req, res) {
         p
     } = req.query
 
+    let cacheId = `${a}_${p}`
+    let table;
+
     try {
-        const result = await fetchDataFromEth(a, p)
-        // 页面html结构
-        let html = result.data;
-        let table = parse(html);
+        if (checkCache(cacheId)) {
+            table = JSON.parse(getCache(cacheId));
+        } else {
+            result = await fetchDataFromEth(a, p)
+            let html = result.data;
+            table = parse(html);
+            setCache(cacheId, JSON.stringify(table));
+        }
+
+        res.json({
+            data: table
+        })
 
 
     } catch (error) {
@@ -38,7 +55,7 @@ const getData = async function (req, res) {
  * @param p {Number} 页码
  */
 const fetchDataFromEth = async function (a, p) {
-    console.log(a, p)
+
     let result = await getTxsData(a, p)
     return result;
 }

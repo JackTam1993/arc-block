@@ -7,15 +7,23 @@ const compression = require('compression');
 const cookieParser = require('cookie-parser');
 const fallback = require('express-history-api-fallback');
 
-const { name, version } = require('../package.json');
+const {
+  name,
+  version
+} = require('../package.json');
 const logger = require('./libs/logger');
 
 const app = express();
 
 app.set('trust proxy', true);
 app.use(cookieParser());
-app.use(express.json({ limit: '1 mb' }));
-app.use(express.urlencoded({ extended: true, limit: '1 mb' }));
+app.use(express.json({
+  limit: '1 mb'
+}));
+app.use(express.urlencoded({
+  extended: true,
+  limit: '1 mb'
+}));
 
 const router = express.Router();
 router.use('/api', require('./routes'));
@@ -24,7 +32,7 @@ const isDevelopment = process.env.NODE_ENV === 'development';
 const isProduction = process.env.NODE_ENV === 'production' || process.env.ABT_NODE_SERVICE_ENV === 'production';
 
 if (isDevelopment) {
-  process.env.BLOCKLET_PORT = 3030;
+  process.env.BLOCKLET_PORT = 3031;
 }
 
 if (isProduction) {
@@ -32,9 +40,13 @@ if (isProduction) {
   app.use(compression());
 
   const staticDir = path.resolve(__dirname, '../', 'dist');
-  app.use(express.static(staticDir, { index: 'index.html' }));
+  app.use(express.static(staticDir, {
+    index: 'index.html'
+  }));
   app.use(router);
-  app.use(fallback('index.html', { root: staticDir }));
+  app.use(fallback('index.html', {
+    root: staticDir
+  }));
 
   app.use((req, res) => {
     res.status(404).send('404 NOT FOUND');
